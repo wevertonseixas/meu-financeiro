@@ -1,0 +1,1738 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color"
+          content="#4f6f52">
+
+    <meta name="mobile-web-app-capable"
+          content="yes">
+
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="default">
+
+    <meta name="apple-mobile-web-app-title"
+          content="Meu Financeiro">
+
+    <link rel="manifest"
+          href="./manifest.json">
+
+    <title>Meu Financeiro</title>
+
+
+<style>
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+
+    --verde: #6f8f72;
+    --verde-escuro: #4f6f52;
+    --verde-claro: #e9f0e8;
+
+    --vermelho: #c96b6b;
+    --vermelho-claro: #f8e8e8;
+
+    --fundo: #f5f7f2;
+    --branco: #ffffff;
+
+    --texto: #30352f;
+    --texto-secundario: #7b8178;
+
+    --borda: #e4e8e1;
+}
+
+body {
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    background: var(--fundo);
+
+    color: var(--texto);
+
+    min-height: 100vh;
+}
+
+.app {
+
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: auto;
+
+    min-height: 100vh;
+
+    padding-bottom: 100px;
+}
+
+
+/* TOPO */
+
+.topo {
+
+    padding: 24px 18px 18px;
+}
+
+.topo h1 {
+
+    font-size: 25px;
+
+    margin-bottom: 5px;
+}
+
+.topo p {
+
+    color: var(--texto-secundario);
+
+    font-size: 14px;
+}
+
+
+/* SALDO */
+
+.saldo-card {
+
+    margin: 0 16px 16px;
+
+    padding: 24px;
+
+    background: var(--verde-escuro);
+
+    color: white;
+
+    border-radius: 20px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(79,111,82,.18);
+}
+
+.saldo-label {
+
+    font-size: 13px;
+
+    opacity: .8;
+
+    margin-bottom: 8px;
+}
+
+.saldo {
+
+    font-size: 32px;
+
+    font-weight: bold;
+}
+
+
+/* RESUMO */
+
+.resumo {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 12px;
+
+    padding: 0 16px;
+
+    margin-bottom: 20px;
+}
+
+.resumo-card {
+
+    background: var(--branco);
+
+    border: 1px solid var(--borda);
+
+    border-radius: 16px;
+
+    padding: 16px;
+}
+
+.resumo-card span {
+
+    display: block;
+
+    font-size: 12px;
+
+    color:
+        var(--texto-secundario);
+
+    margin-bottom: 7px;
+}
+
+.resumo-card strong {
+
+    font-size: 18px;
+}
+
+.valor-receita {
+
+    color: var(--verde-escuro);
+}
+
+.valor-despesa {
+
+    color: var(--vermelho);
+}
+
+
+/* FILTROS */
+
+.filtros {
+
+    display: flex;
+
+    gap: 8px;
+
+    padding: 0 16px;
+
+    margin-bottom: 15px;
+
+    overflow-x: auto;
+}
+
+.filtro {
+
+    border: none;
+
+    background: #e7ebe5;
+
+    color: var(--texto);
+
+    padding: 10px 16px;
+
+    border-radius: 30px;
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    font-weight: 600;
+}
+
+.filtro.ativo {
+
+    background: var(--verde);
+
+    color: white;
+}
+
+
+/* TÍTULO */
+
+.titulo-secao {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    padding: 0 16px;
+
+    margin-bottom: 10px;
+}
+
+.titulo-secao h2 {
+
+    font-size: 18px;
+}
+
+
+/* LISTA */
+
+.lista {
+
+    padding: 0 16px;
+}
+
+.lancamento {
+
+    background: var(--branco);
+
+    border:
+        1px solid var(--borda);
+
+    border-radius: 16px;
+
+    padding: 15px;
+
+    margin-bottom: 10px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+}
+
+.icone {
+
+    width: 44px;
+
+    height: 44px;
+
+    border-radius: 14px;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    font-size: 19px;
+
+    flex-shrink: 0;
+}
+
+.icone.receita {
+
+    background:
+        var(--verde-claro);
+}
+
+.icone.despesa {
+
+    background:
+        var(--vermelho-claro);
+}
+
+.info {
+
+    flex: 1;
+
+    min-width: 0;
+}
+
+.descricao {
+
+    font-weight: bold;
+
+    font-size: 14px;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.categoria {
+
+    font-size: 12px;
+
+    color:
+        var(--texto-secundario);
+
+    margin-top: 4px;
+}
+
+.data {
+
+    font-size: 11px;
+
+    color:
+        var(--texto-secundario);
+
+    margin-top: 3px;
+}
+
+.valor {
+
+    text-align: right;
+
+    font-weight: bold;
+
+    white-space: nowrap;
+}
+
+.valor.receita {
+
+    color: var(--verde-escuro);
+}
+
+.valor.despesa {
+
+    color: var(--vermelho);
+}
+
+.acoes {
+
+    display: flex;
+
+    gap: 5px;
+
+    margin-left: 5px;
+}
+
+.acao {
+
+    border: none;
+
+    background: transparent;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    padding: 5px;
+}
+
+
+/* VAZIO */
+
+.vazio {
+
+    text-align: center;
+
+    padding: 45px 20px;
+
+    color:
+        var(--texto-secundario);
+}
+
+.vazio .emoji {
+
+    font-size: 40px;
+
+    margin-bottom: 10px;
+}
+
+.vazio p {
+
+    font-size: 14px;
+}
+
+
+/* BOTÃO + */
+
+.btn-adicionar {
+
+    position: fixed;
+
+    right: 20px;
+
+    bottom: 20px;
+
+    width: 58px;
+
+    height: 58px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        var(--verde-escuro);
+
+    color: white;
+
+    font-size: 30px;
+
+    box-shadow:
+        0 8px 25px
+        rgba(0,0,0,.2);
+
+    cursor: pointer;
+
+    z-index: 10;
+}
+
+
+/* MODAL */
+
+.modal-fundo {
+
+    position: fixed;
+
+    inset: 0;
+
+    background:
+        rgba(0,0,0,.45);
+
+    display: none;
+
+    align-items: flex-end;
+
+    z-index: 20;
+}
+
+.modal-fundo.aberto {
+
+    display: flex;
+}
+
+.modal {
+
+    width: 100%;
+
+    max-width: 650px;
+
+    margin: auto auto 0;
+
+    background: white;
+
+    border-radius:
+        25px 25px 0 0;
+
+    padding:
+        24px 18px 30px;
+}
+
+.modal-topo {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.modal-topo h2 {
+
+    font-size: 20px;
+}
+
+.fechar {
+
+    border: none;
+
+    background: #f1f1f1;
+
+    width: 35px;
+
+    height: 35px;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+
+    cursor: pointer;
+}
+
+
+/* FORM */
+
+.campo {
+
+    margin-bottom: 15px;
+}
+
+.campo label {
+
+    display: block;
+
+    font-size: 13px;
+
+    font-weight: bold;
+
+    margin-bottom: 6px;
+}
+
+.campo input,
+.campo select {
+
+    width: 100%;
+
+    padding: 13px;
+
+    border:
+        1px solid var(--borda);
+
+    border-radius: 11px;
+
+    background: #fafafa;
+
+    font-size: 15px;
+
+    outline: none;
+}
+
+
+/* TIPO */
+
+.tipo {
+
+    display: grid;
+
+    grid-template-columns:
+        1fr 1fr;
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+}
+
+.tipo button {
+
+    padding: 12px;
+
+    border:
+        2px solid var(--borda);
+
+    border-radius: 10px;
+
+    background: white;
+
+    cursor: pointer;
+
+    font-weight: bold;
+}
+
+.tipo button.selecionado-receita {
+
+    border-color: var(--verde);
+
+    background:
+        var(--verde-claro);
+
+    color:
+        var(--verde-escuro);
+}
+
+.tipo button.selecionado-despesa {
+
+    border-color: var(--vermelho);
+
+    background:
+        var(--vermelho-claro);
+
+    color:
+        var(--vermelho);
+}
+
+.btn-salvar {
+
+    width: 100%;
+
+    padding: 15px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background:
+        var(--verde-escuro);
+
+    color: white;
+
+    font-size: 16px;
+
+    font-weight: bold;
+
+    cursor: pointer;
+}
+
+
+/* DESKTOP */
+
+@media (min-width: 700px) {
+
+    body {
+        padding: 30px;
+    }
+
+    .modal {
+
+        border-radius: 25px;
+
+        margin: auto;
+
+        max-width: 500px;
+    }
+
+    .modal-fundo {
+
+        align-items: center;
+    }
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+<header class="topo">
+
+    <h1>
+        Meu Financeiro 💰
+    </h1>
+
+    <p>
+        Controle seus gastos e receitas
+    </p>
+
+</header>
+
+
+<section class="saldo-card">
+
+    <div class="saldo-label">
+        Saldo atual
+    </div>
+
+    <div
+        class="saldo"
+        id="saldo">
+
+        R$ 0,00
+
+    </div>
+
+</section>
+
+
+<section class="resumo">
+
+    <div class="resumo-card">
+
+        <span>
+            Receitas
+        </span>
+
+        <strong
+            class="valor-receita"
+            id="receitas">
+
+            R$ 0,00
+
+        </strong>
+
+    </div>
+
+
+    <div class="resumo-card">
+
+        <span>
+            Despesas
+        </span>
+
+        <strong
+            class="valor-despesa"
+            id="despesas">
+
+            R$ 0,00
+
+        </strong>
+
+    </div>
+
+</section>
+
+
+<div class="filtros">
+
+    <button
+        class="filtro ativo"
+        onclick="filtrar('todos', this)">
+
+        Todos
+
+    </button>
+
+    <button
+        class="filtro"
+        onclick="filtrar('Receita', this)">
+
+        Receitas
+
+    </button>
+
+    <button
+        class="filtro"
+        onclick="filtrar('Despesa', this)">
+
+        Despesas
+
+    </button>
+
+</div>
+
+
+<div class="titulo-secao">
+
+    <h2>
+        Lançamentos
+    </h2>
+
+</div>
+
+
+<section
+    class="lista"
+    id="lista">
+</section>
+
+
+</div>
+
+
+<button
+    class="btn-adicionar"
+    onclick="abrirModal()">
+
+    +
+
+</button>
+
+
+<div
+    class="modal-fundo"
+    id="modalFundo">
+
+    <div class="modal">
+
+
+        <div class="modal-topo">
+
+            <h2 id="tituloModal">
+                Novo lançamento
+            </h2>
+
+            <button
+                class="fechar"
+                onclick="fecharModal()">
+
+                ×
+
+            </button>
+
+        </div>
+
+
+        <div class="tipo">
+
+            <button
+                id="btnReceita"
+                onclick="selecionarTipo('Receita')">
+
+                ↑ Receita
+
+            </button>
+
+
+            <button
+                id="btnDespesa"
+                onclick="selecionarTipo('Despesa')">
+
+                ↓ Despesa
+
+            </button>
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Descrição
+            </label>
+
+            <input
+                type="text"
+                id="descricao"
+                placeholder="Ex: Salário, mercado...">
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Categoria
+            </label>
+
+            <select id="categoria">
+
+                <option value="Salário">
+                    Salário
+                </option>
+
+                <option value="Alimentação">
+                    Alimentação
+                </option>
+
+                <option value="Moradia">
+                    Moradia
+                </option>
+
+                <option value="Transporte">
+                    Transporte
+                </option>
+
+                <option value="Lazer">
+                    Lazer
+                </option>
+
+                <option value="Contas">
+                    Contas
+                </option>
+
+                <option value="Compras">
+                    Compras
+                </option>
+
+                <option value="Saúde">
+                    Saúde
+                </option>
+
+                <option value="Educação">
+                    Educação
+                </option>
+
+                <option value="Outros">
+                    Outros
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Valor
+            </label>
+
+            <input
+                type="number"
+                id="valor"
+                placeholder="0,00"
+                step="0.01"
+                min="0"
+                inputmode="decimal">
+
+        </div>
+
+
+        <div class="campo">
+
+            <label>
+                Data
+            </label>
+
+            <input
+                type="date"
+                id="data">
+
+        </div>
+
+
+        <button
+            class="btn-salvar"
+            onclick="salvarLancamento()">
+
+            Salvar lançamento
+
+        </button>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+
+let lancamentos =
+    JSON.parse(
+        localStorage.getItem(
+            "meuFinanceiro"
+        )
+    ) || [];
+
+
+let tipoSelecionado =
+    "Despesa";
+
+let editando = null;
+
+let filtroAtual =
+    "todos";
+
+
+const lista =
+    document.getElementById(
+        "lista"
+    );
+
+const modal =
+    document.getElementById(
+        "modalFundo"
+    );
+
+
+function moeda(valor) {
+
+    return Number(valor || 0)
+        .toLocaleString(
+            "pt-BR",
+            {
+                style: "currency",
+                currency: "BRL"
+            }
+        );
+}
+
+
+function dataAtual() {
+
+    const agora =
+        new Date();
+
+    return agora
+        .toISOString()
+        .split("T")[0];
+}
+
+
+function formatarData(data) {
+
+    if (!data)
+        return "";
+
+    const partes =
+        data.split("-");
+
+    return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
+
+
+function abrirModal(index = null) {
+
+    editando = index;
+
+    modal.classList.add(
+        "aberto"
+    );
+
+
+    if (index !== null) {
+
+        const item =
+            lancamentos[index];
+
+        document
+            .getElementById(
+                "tituloModal"
+            )
+            .textContent =
+            "Editar lançamento";
+
+
+        document
+            .getElementById(
+                "descricao"
+            )
+            .value =
+            item.descricao;
+
+
+        document
+            .getElementById(
+                "categoria"
+            )
+            .value =
+            item.categoria;
+
+
+        document
+            .getElementById(
+                "valor"
+            )
+            .value =
+            item.valor;
+
+
+        document
+            .getElementById(
+                "data"
+            )
+            .value =
+            item.data;
+
+
+        selecionarTipo(
+            item.tipo
+        );
+
+
+    } else {
+
+        document
+            .getElementById(
+                "tituloModal"
+            )
+            .textContent =
+            "Novo lançamento";
+
+
+        document
+            .getElementById(
+                "descricao"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "categoria"
+            )
+            .value =
+            "Outros";
+
+
+        document
+            .getElementById(
+                "valor"
+            )
+            .value = "";
+
+
+        document
+            .getElementById(
+                "data"
+            )
+            .value =
+            dataAtual();
+
+
+        selecionarTipo(
+            "Despesa"
+        );
+
+    }
+
+}
+
+
+function fecharModal() {
+
+    modal.classList.remove(
+        "aberto"
+    );
+
+    editando = null;
+
+}
+
+
+function selecionarTipo(tipo) {
+
+    tipoSelecionado =
+        tipo;
+
+
+    const receita =
+        document.getElementById(
+            "btnReceita"
+        );
+
+
+    const despesa =
+        document.getElementById(
+            "btnDespesa"
+        );
+
+
+    receita.className = "";
+
+    despesa.className = "";
+
+
+    if (tipo === "Receita") {
+
+        receita.classList.add(
+            "selecionado-receita"
+        );
+
+    } else {
+
+        despesa.classList.add(
+            "selecionado-despesa"
+        );
+
+    }
+
+}
+
+
+function salvarLancamento() {
+
+    const descricao =
+        document
+            .getElementById(
+                "descricao"
+            )
+            .value
+            .trim();
+
+
+    const categoria =
+        document
+            .getElementById(
+                "categoria"
+            )
+            .value;
+
+
+    const valor =
+        parseFloat(
+            document
+                .getElementById(
+                    "valor"
+                )
+                .value
+        );
+
+
+    const data =
+        document
+            .getElementById(
+                "data"
+            )
+            .value;
+
+
+    if (!descricao) {
+
+        alert(
+            "Digite uma descrição."
+        );
+
+        return;
+
+    }
+
+
+    if (!valor || valor <= 0) {
+
+        alert(
+            "Digite um valor válido."
+        );
+
+        return;
+
+    }
+
+
+    const novoLancamento = {
+
+        tipo:
+            tipoSelecionado,
+
+        descricao:
+            descricao,
+
+        categoria:
+            categoria,
+
+        valor:
+            valor,
+
+        data:
+            data
+
+    };
+
+
+    if (editando !== null) {
+
+        lancamentos[
+            editando
+        ] =
+            novoLancamento;
+
+    } else {
+
+        lancamentos.unshift(
+            novoLancamento
+        );
+
+    }
+
+
+    salvarDados();
+
+    renderizar();
+
+    fecharModal();
+
+}
+
+
+function salvarDados() {
+
+    localStorage.setItem(
+
+        "meuFinanceiro",
+
+        JSON.stringify(
+            lancamentos
+        )
+
+    );
+
+}
+
+
+function excluir(index) {
+
+    if (
+        !confirm(
+            "Deseja excluir este lançamento?"
+        )
+    ) {
+
+        return;
+
+    }
+
+
+    lancamentos.splice(
+        index,
+        1
+    );
+
+
+    salvarDados();
+
+    renderizar();
+
+}
+
+
+function filtrar(
+    tipo,
+    botao
+) {
+
+    filtroAtual =
+        tipo;
+
+
+    document
+        .querySelectorAll(
+            ".filtro"
+        )
+        .forEach(btn => {
+
+            btn.classList
+                .remove(
+                    "ativo"
+                );
+
+        });
+
+
+    botao.classList.add(
+        "ativo"
+    );
+
+
+    renderizar();
+
+}
+
+
+function renderizar() {
+
+    atualizarResumo();
+
+
+    lista.innerHTML = "";
+
+
+    const filtrados =
+        lancamentos.filter(
+            item => {
+
+                if (
+                    filtroAtual ===
+                    "todos"
+                ) {
+
+                    return true;
+
+                }
+
+                return (
+                    item.tipo ===
+                    filtroAtual
+                );
+
+            }
+        );
+
+
+    if (
+        filtrados.length === 0
+    ) {
+
+        lista.innerHTML = `
+
+            <div class="vazio">
+
+                <div class="emoji">
+                    📭
+                </div>
+
+                <p>
+                    Nenhum lançamento encontrado.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    filtrados.forEach(
+        item => {
+
+            const index =
+                lancamentos
+                    .indexOf(
+                        item
+                    );
+
+
+            const receita =
+                item.tipo ===
+                "Receita";
+
+
+            const elemento =
+                document
+                    .createElement(
+                        "div"
+                    );
+
+
+            elemento.className =
+                "lancamento";
+
+
+            elemento.innerHTML = `
+
+                <div
+                    class="icone ${
+                        receita
+                        ? "receita"
+                        : "despesa"
+                    }">
+
+                    ${
+                        receita
+                        ? "↑"
+                        : "↓"
+                    }
+
+                </div>
+
+
+                <div class="info">
+
+                    <div
+                        class="descricao">
+
+                        ${
+                            escapar(
+                                item.descricao
+                            )
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="categoria">
+
+                        ${
+                            escapar(
+                                item.categoria
+                            )
+                        }
+
+                    </div>
+
+
+                    <div
+                        class="data">
+
+                        ${
+                            formatarData(
+                                item.data
+                            )
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="valor ${
+                        receita
+                        ? "receita"
+                        : "despesa"
+                    }">
+
+                    ${
+                        receita
+                        ? "+"
+                        : "-"
+                    }
+
+                    ${
+                        moeda(
+                            item.valor
+                        )
+                    }
+
+                </div>
+
+
+                <div class="acoes">
+
+                    <button
+                        class="acao"
+                        onclick="
+                            abrirModal(
+                                ${index}
+                            )
+                        ">
+
+                        ✏️
+
+                    </button>
+
+
+                    <button
+                        class="acao"
+                        onclick="
+                            excluir(
+                                ${index}
+                            )
+                        ">
+
+                        🗑️
+
+                    </button>
+
+                </div>
+
+            `;
+
+
+            lista.appendChild(
+                elemento
+            );
+
+        }
+    );
+
+}
+
+
+function escapar(texto) {
+
+    return String(
+        texto || ""
+    )
+    .replace(
+        /&/g,
+        "&amp;"
+    )
+    .replace(
+        /</g,
+        "&lt;"
+    )
+    .replace(
+        />/g,
+        "&gt;"
+    )
+    .replace(
+        /"/g,
+        "&quot;"
+    )
+    .replace(
+        /'/g,
+        "&#039;"
+    );
+
+}
+
+
+function atualizarResumo() {
+
+    let receitas = 0;
+
+    let despesas = 0;
+
+
+    lancamentos.forEach(
+        item => {
+
+            const valor =
+                Number(
+                    item.valor
+                ) || 0;
+
+
+            if (
+                item.tipo ===
+                "Receita"
+            ) {
+
+                receitas +=
+                    valor;
+
+            } else {
+
+                despesas +=
+                    valor;
+
+            }
+
+        }
+    );
+
+
+    const saldo =
+        receitas -
+        despesas;
+
+
+    document
+        .getElementById(
+            "receitas"
+        )
+        .textContent =
+        moeda(
+            receitas
+        );
+
+
+    document
+        .getElementById(
+            "despesas"
+        )
+        .textContent =
+        moeda(
+            despesas
+        );
+
+
+    document
+        .getElementById(
+            "saldo"
+        )
+        .textContent =
+        moeda(
+            saldo
+        );
+
+}
+
+
+modal.addEventListener(
+    "click",
+    function(event) {
+
+        if (
+            event.target ===
+            modal
+        ) {
+
+            fecharModal();
+
+        }
+
+    }
+);
+
+
+/* PWA */
+
+if (
+    "serviceWorker"
+    in navigator
+) {
+
+    window.addEventListener(
+        "load",
+        () => {
+
+            navigator
+                .serviceWorker
+                .register(
+                    "./service-worker.js"
+                )
+                .then(
+                    () => {
+                        console.log(
+                            "PWA ativada."
+                        );
+                    }
+                )
+                .catch(
+                    erro => {
+
+                        console.error(
+                            "Erro ao ativar PWA:",
+                            erro
+                        );
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+
+renderizar();
+
+</script>
+
+
+</body>
+
+</html>
