@@ -1689,41 +1689,24 @@ modal.addEventListener(
 
 /* PWA */
 
-if (
-    "serviceWorker"
-    in navigator
-) {
+if ("serviceWorker" in navigator) {
 
-    window.addEventListener(
-        "load",
-        () => {
+    window.addEventListener("load", () => {
 
-            navigator.serviceWorker.register(
-    "/meu-financeiro/service-worker.js",
-    {
-        scope: "/meu-financeiro/"
-    }
-)
-                .then(
-                    () => {
-                        console.log(
-                            "PWA ativada."
-                        );
-                    }
-                )
-                .catch(
-                    erro => {
+        navigator.serviceWorker.register(
+            "/meu-financeiro/service-worker.js",
+            {
+                scope: "/meu-financeiro/"
+            }
+        )
+        .then(() => {
+            console.log("PWA ativada");
+        })
+        .catch(error => {
+            console.error("Erro ao registrar PWA:", error);
+        });
 
-                        console.error(
-                            "Erro ao ativar PWA:",
-                            erro
-                        );
-
-                    }
-                );
-
-        }
-    );
+    });
 
 }
 
