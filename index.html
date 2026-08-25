@@ -1156,6 +1156,22 @@ let editando = null;
 
 let filtroAtual =
     "todos";
+    let mesSelecionado = new Date();
+
+const nomesMeses = [
+    "Janeiro",
+    "Fevereiro",
+    "Março",
+    "Abril",
+    "Maio",
+    "Junho",
+    "Julho",
+    "Agosto",
+    "Setembro",
+    "Outubro",
+    "Novembro",
+    "Dezembro"
+];
 
 
 const lista =
@@ -1541,7 +1557,30 @@ function filtrar(
 
 }
 
+function atualizarMes() {
 
+    const elemento =
+        document.getElementById(
+            "mesAtual"
+        );
+
+    elemento.textContent =
+        `${nomesMeses[mesSelecionado.getMonth()]} ${mesSelecionado.getFullYear()}`;
+}
+
+
+function mudarMes(direcao) {
+
+    mesSelecionado.setMonth(
+        mesSelecionado.getMonth() + direcao
+    );
+
+    atualizarMes();
+
+    renderizar();
+
+}
+    
 function renderizar() {
 
     atualizarResumo();
