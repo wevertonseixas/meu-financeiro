@@ -1589,27 +1589,51 @@ function renderizar() {
     lista.innerHTML = "";
 
 
+
     const filtrados =
-        lancamentos.filter(
-            item => {
+    lancamentos.filter(
+        item => {
 
-                if (
-                    filtroAtual ===
-                    "todos"
-                ) {
+            if (!item.data) {
+                return false;
+            }
 
-                    return true;
+            const partes =
+                item.data.split("-");
 
-                }
+            const ano =
+                Number(partes[0]);
 
-                return (
-                    item.tipo ===
-                    filtroAtual
-                );
+            const mes =
+                Number(partes[1]) - 1;
+
+            const mesmoMes =
+                ano ===
+                    mesSelecionado.getFullYear()
+                &&
+                mes ===
+                    mesSelecionado.getMonth();
+
+            if (!mesmoMes) {
+                return false;
+            }
+
+            if (
+                filtroAtual ===
+                "todos"
+            ) {
+
+                return true;
 
             }
-        );
 
+            return (
+                item.tipo ===
+                filtroAtual
+            );
+
+        }
+    );
 
     if (
         filtrados.length === 0
