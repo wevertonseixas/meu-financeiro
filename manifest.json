@@ -2,10 +2,9 @@
   "name": "Meu Financeiro",
   "short_name": "Financeiro",
   "description": "Controle pessoal de receitas e despesas.",
-  "start_url": "./",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "orientation": "portrait",
   "background_color": "#f5f7f2",
   "theme_color": "#4f6f52"
 }
