@@ -669,7 +669,137 @@ body {
         align-items: center;
     }
 }
+/* BOTÃO DE TEMA */
 
+.topo-linha {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 15px;
+}
+
+
+.btn-tema {
+
+    width: 44px;
+
+    height: 44px;
+
+    border: 1px solid var(--borda);
+
+    border-radius: 50%;
+
+    background: var(--branco);
+
+    font-size: 19px;
+
+    cursor: pointer;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    flex-shrink: 0;
+
+    transition:
+        background .2s,
+        transform .2s;
+}
+
+
+.btn-tema:active {
+
+    transform: scale(.92);
+
+}
+
+
+/* =========================
+   TEMA ESCURO
+   ========================= */
+
+body.tema-escuro {
+
+    --fundo: #171a17;
+
+    --branco: #222722;
+
+    --texto: #eeeeeb;
+
+    --texto-secundario: #a9afa6;
+
+    --borda: #353b35;
+
+    --verde-claro: #28372b;
+
+    --vermelho-claro: #3a2929;
+
+}
+
+
+body.tema-escuro .filtro {
+
+    background: #2b302b;
+
+    color: #eeeeeb;
+
+}
+
+
+body.tema-escuro .filtro.ativo {
+
+    background: var(--verde);
+
+    color: white;
+
+}
+
+
+body.tema-escuro .campo input,
+body.tema-escuro .campo select {
+
+    background: #1c201c;
+
+    color: #eeeeeb;
+
+    border-color: var(--borda);
+
+}
+
+
+body.tema-escuro .tipo button {
+
+    background: #1c201c;
+
+    color: #eeeeeb;
+
+    border-color: var(--borda);
+
+}
+
+
+body.tema-escuro .fechar {
+
+    background: #303530;
+
+    color: white;
+
+}
+
+
+body.tema-escuro .btn-tema {
+
+    background: #2b302b;
+
+    border-color: var(--borda);
+
+}
 </style>
 
 </head>
@@ -683,13 +813,29 @@ body {
 
 <header class="topo">
 
-    <h1>
-        Meu Financeiro 💰
-    </h1>
+    <div class="topo-linha">
 
-    <p>
-        Controle seus gastos e receitas
-    </p>
+        <div>
+            <h1>
+                Meu Financeiro 💰
+            </h1>
+
+            <p>
+                Controle seus gastos e receitas
+            </p>
+        </div>
+
+        <button
+            class="btn-tema"
+            id="btnTema"
+            onclick="alternarTema()"
+            aria-label="Alternar tema">
+
+            🌙
+
+        </button>
+
+    </div>
 
 </header>
 
@@ -1712,6 +1858,53 @@ if ("serviceWorker" in navigator) {
 
 
 renderizar();
+    /* =========================
+   TEMA CLARO / ESCURO
+   ========================= */
+
+const temaSalvo =
+    localStorage.getItem("temaFinanceiro");
+
+if (temaSalvo === "escuro") {
+
+    document.body.classList.add(
+        "tema-escuro"
+    );
+
+    document
+        .getElementById("btnTema")
+        .textContent = "☀️";
+
+}
+
+
+function alternarTema() {
+
+    const escuro =
+        document.body.classList.toggle(
+            "tema-escuro"
+        );
+
+
+    localStorage.setItem(
+
+        "temaFinanceiro",
+
+        escuro
+            ? "escuro"
+            : "claro"
+
+    );
+
+
+    document
+        .getElementById("btnTema")
+        .textContent =
+            escuro
+                ? "☀️"
+                : "🌙";
+
+}
 
 </script>
 
