@@ -1,7 +1,6 @@
 {
   "name": "Meu Financeiro",
   "short_name": "Financeiro",
-  "description": "Controle pessoal de receitas e despesas.",
   "id": "/meu-financeiro/",
   "start_url": "/meu-financeiro/",
   "scope": "/meu-financeiro/",
