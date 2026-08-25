@@ -1585,34 +1585,31 @@ function renderizar() {
 
     atualizarResumo();
 
-
     lista.innerHTML = "";
 
-
-
     const filtrados =
-    lancamentos.filter(
-        item => {
+        lancamentos.filter(
+            item => {
 
-            if (!item.data) {
-                return false;
-            }
+                if (!item.data) {
+                    return false;
+                }
 
-            const partes =
-                item.data.split("-");
+                const partes =
+                    item.data.split("-");
 
-            const ano =
-                Number(partes[0]);
+                const ano =
+                    Number(partes[0]);
 
-            const mes =
-                Number(partes[1]) - 1;
+                const mes =
+                    Number(partes[1]) - 1;
 
-            const mesmoMes =
-                ano ===
-                    mesSelecionado.getFullYear()
-                &&
-                mes ===
-                    mesSelecionado.getMonth();
+                const mesmoMes =
+                    ano ===
+                        mesSelecionado.getFullYear()
+                    &&
+                    mes ===
+                        mesSelecionado.getMonth();
 
             if (!mesmoMes) {
                 return false;
