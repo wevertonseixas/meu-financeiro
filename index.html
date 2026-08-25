@@ -1699,11 +1699,12 @@ if (
         "load",
         () => {
 
-            navigator
-                .serviceWorker
-                .register(
-                    "./service-worker.js"
-                )
+            navigator.serviceWorker.register(
+    "/meu-financeiro/service-worker.js",
+    {
+        scope: "/meu-financeiro/"
+    }
+)
                 .then(
                     () => {
                         console.log(
