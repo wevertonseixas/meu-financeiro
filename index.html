@@ -1836,74 +1836,49 @@ function escapar(texto) {
 function atualizarResumo() {
 
     let receitas = 0;
-
     let despesas = 0;
 
+    lancamentos.forEach(item => {
 
-    lancamentos.forEach(
-        item => {
-
-            const valor =
-                Number(
-                    item.valor
-                ) || 0;
-
-
-            if (
-                item.tipo ===
-                "Receita"
-            ) {
-
-                receitas +=
-                    valor;
-
-            } else {
-
-                despesas +=
-                    valor;
-
-            }
-
+        if (!item.data) {
+            return;
         }
-    );
 
+        const partes = item.data.split("-");
 
-    const saldo =
-        receitas -
-        despesas;
+        const ano = Number(partes[0]);
+        const mes = Number(partes[1]) - 1;
 
+        const mesmoMes =
+            ano === mesSelecionado.getFullYear() &&
+            mes === mesSelecionado.getMonth();
 
-    document
-        .getElementById(
-            "receitas"
-        )
-        .textContent =
-        moeda(
-            receitas
-        );
+        if (!mesmoMes) {
+            return;
+        }
 
+        const valor = Number(item.valor) || 0;
 
-    document
-        .getElementById(
-            "despesas"
-        )
-        .textContent =
-        moeda(
-            despesas
-        );
+        if (item.tipo === "Receita") {
+            receitas += valor;
+        } else {
+            despesas += valor;
+        }
 
+    });
 
-    document
-        .getElementById(
-            "saldo"
-        )
-        .textContent =
-        moeda(
-            saldo
-        );
+    const saldo = receitas - despesas;
+
+    document.getElementById("receitas").textContent =
+        moeda(receitas);
+
+    document.getElementById("despesas").textContent =
+        moeda(despesas);
+
+    document.getElementById("saldo").textContent =
+        moeda(saldo);
 
 }
-
 
 modal.addEventListener(
     "click",
