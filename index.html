@@ -1407,38 +1407,6 @@ function selecionarTipo(tipo) {
 
 }
 
-function criarLancamentosRecorrentes(lancamento) {
-
-    if (lancamento.recorrencia !== "mensal") {
-        return;
-    }
-
-    const dataInicial = new Date(lancamento.data + "T00:00:00");
-
-    for (let i = 1; i <= 11; i++) {
-
-        const novaData = new Date(dataInicial);
-
-        novaData.setMonth(novaData.getMonth() + i);
-
-        const ano = novaData.getFullYear();
-        const mes = String(novaData.getMonth() + 1).padStart(2, "0");
-        const dia = String(novaData.getDate()).padStart(2, "0");
-
-        const novoLancamento = {
-            tipo: lancamento.tipo,
-            descricao: lancamento.descricao,
-            categoria: lancamento.categoria,
-            valor: lancamento.valor,
-            data: `${ano}-${mes}-${dia}`,
-            recorrencia: "gerado"
-        };
-
-        lancamentos.push(novoLancamento);
-        criarLancamentosRecorrentes(novoLancamento);
-    }
-}
-
 function salvarLancamento() {
 
     const descricao =
@@ -1545,26 +1513,22 @@ function criarLancamentosRecorrentes(lancamento) {
         return;
     }
 
-    const dataInicial = new Date(
-        lancamento.data + "T00:00:00"
-    );
+    const dataInicial =
+        new Date(lancamento.data + "T00:00:00");
 
     const diaOriginal =
         dataInicial.getDate();
 
     for (let i = 1; i <= 11; i++) {
 
-        const novaData = new Date(
-            dataInicial
-        );
+        const novaData =
+            new Date(
+                dataInicial.getFullYear(),
+                dataInicial.getMonth() + i,
+                1
+            );
 
-        novaData.setDate(1);
-
-        novaData.setMonth(
-            dataInicial.getMonth() + i
-        );
-
-        const ultimoDiaDoMes =
+        const ultimoDia =
             new Date(
                 novaData.getFullYear(),
                 novaData.getMonth() + 1,
@@ -1574,7 +1538,7 @@ function criarLancamentosRecorrentes(lancamento) {
         novaData.setDate(
             Math.min(
                 diaOriginal,
-                ultimoDiaDoMes
+                ultimoDia
             )
         );
 
@@ -1593,7 +1557,8 @@ function criarLancamentosRecorrentes(lancamento) {
 
         const novoLancamento = {
 
-            tipo: lancamento.tipo,
+            tipo:
+                lancamento.tipo,
 
             descricao:
                 lancamento.descricao,
@@ -1615,10 +1580,8 @@ function criarLancamentosRecorrentes(lancamento) {
         lancamentos.push(
             novoLancamento
         );
-
     }
-
-            }
+}
 
 function salvarDados() {
 
