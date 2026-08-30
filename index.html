@@ -1123,6 +1123,34 @@ body.tema-escuro .btn-tema {
 
         </div>
 
+        <div class="campo">
+    <label>
+        Repetição
+    </label>
+
+    <select id="recorrencia">
+        <option value="nenhuma">
+            Não repetir
+        </option>
+
+        <option value="mensal">
+            Mensalmente
+        </option>
+
+        <option value="3">
+            Por 3 meses
+        </option>
+
+        <option value="6">
+            Por 6 meses
+        </option>
+
+        <option value="12">
+            Por 12 meses
+        </option>
+    </select>
+        </div>
+
 
         <button
             class="btn-salvar"
@@ -1379,6 +1407,37 @@ function selecionarTipo(tipo) {
 
 }
 
+function criarLancamentosRecorrentes(lancamento) {
+
+    if (lancamento.recorrencia !== "mensal") {
+        return;
+    }
+
+    const dataInicial = new Date(lancamento.data + "T00:00:00");
+
+    for (let i = 1; i <= 11; i++) {
+
+        const novaData = new Date(dataInicial);
+
+        novaData.setMonth(novaData.getMonth() + i);
+
+        const ano = novaData.getFullYear();
+        const mes = String(novaData.getMonth() + 1).padStart(2, "0");
+        const dia = String(novaData.getDate()).padStart(2, "0");
+
+        const novoLancamento = {
+            tipo: lancamento.tipo,
+            descricao: lancamento.descricao,
+            categoria: lancamento.categoria,
+            valor: lancamento.valor,
+            data: `${ano}-${mes}-${dia}`,
+            recorrencia: "gerado"
+        };
+
+        lancamentos.push(novoLancamento);
+        criarLancamentosRecorrentes(novoLancamento);
+    }
+}
 
 function salvarLancamento() {
 
@@ -1439,25 +1498,16 @@ function salvarLancamento() {
     }
 
 
-    const novoLancamento = {
+const recorrencia = document.getElementById("recorrencia").value;
 
-        tipo:
-            tipoSelecionado,
-
-        descricao:
-            descricao,
-
-        categoria:
-            categoria,
-
-        valor:
-            valor,
-
-        data:
-            data
-
-    };
-
+const novoLancamento = {
+    tipo: tipoSelecionado,
+    descricao: descricao,
+    categoria: categoria,
+    valor: valor,
+    data: data,
+    recorrencia: recorrencia
+};
 
     if (editando !== null) {
 
