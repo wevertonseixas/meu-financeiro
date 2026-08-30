@@ -1507,6 +1507,83 @@ const novoLancamento = {
 
 }
 
+function criarLancamentosRecorrentes(lancamento) {
+
+    const tipoRecorrencia = lancamento.recorrencia;
+
+    if (
+        tipoRecorrencia === "nenhuma" ||
+        tipoRecorrencia === "gerado"
+    ) {
+        return;
+    }
+
+    let quantidade = 0;
+
+    if (tipoRecorrencia === "mensal") {
+        quantidade = 11;
+    } else if (tipoRecorrencia === "3") {
+        quantidade = 2;
+    } else if (tipoRecorrencia === "6") {
+        quantidade = 5;
+    } else if (tipoRecorrencia === "12") {
+        quantidade = 11;
+    } else {
+        return;
+    }
+
+    const dataInicial =
+        new Date(lancamento.data + "T00:00:00");
+
+    const diaOriginal =
+        dataInicial.getDate();
+
+    for (let i = 1; i <= quantidade; i++) {
+
+        const novaData =
+            new Date(
+                dataInicial.getFullYear(),
+                dataInicial.getMonth() + i,
+                1
+            );
+
+        const ultimoDiaDoMes =
+            new Date(
+                novaData.getFullYear(),
+                novaData.getMonth() + 1,
+                0
+            ).getDate();
+
+        novaData.setDate(
+            Math.min(
+                diaOriginal,
+                ultimoDiaDoMes
+            )
+        );
+
+        const ano =
+            novaData.getFullYear();
+
+        const mes =
+            String(
+                novaData.getMonth() + 1
+            ).padStart(2, "0");
+
+        const dia =
+            String(
+                novaData.getDate()
+            ).padStart(2, "0");
+
+        lancamentos.push({
+            tipo: lancamento.tipo,
+            descricao: lancamento.descricao,
+            categoria: lancamento.categoria,
+            valor: lancamento.valor,
+            data: `${ano}-${mes}-${dia}`,
+            recorrencia: "gerado"
+        });
+    }
+}
 
 function salvarDados() {
 
