@@ -1,4 +1,4 @@
-const CACHE_NAME = "meu-financeiro-v4.2.1";
+const CACHE_NAME = "meu-financeiro-v5.0";
 
 const FILES_TO_CACHE = [
   "/meu-financeiro/",
