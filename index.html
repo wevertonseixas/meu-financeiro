@@ -1466,7 +1466,13 @@ function salvarLancamento() {
     }
 
 
-const recorrencia = document.getElementById("recorrencia").value;
+const recorrencia =
+    document.getElementById("recorrencia").value;
+
+const recorrenciaId =
+    recorrencia !== "nenhuma"
+        ? "rec-" + Date.now() + "-" + Math.random().toString(36).substring(2, 8)
+        : null;
 
 const novoLancamento = {
     tipo: tipoSelecionado,
@@ -1474,7 +1480,8 @@ const novoLancamento = {
     categoria: categoria,
     valor: valor,
     data: data,
-    recorrencia: recorrencia
+    recorrencia: recorrencia,
+    recorrenciaId: recorrenciaId
 };
 
     if (editando !== null) {
@@ -1576,13 +1583,14 @@ function criarLancamentosRecorrentes(lancamento) {
             ).padStart(2, "0");
 
         lancamentos.push({
-            tipo: lancamento.tipo,
-            descricao: lancamento.descricao,
-            categoria: lancamento.categoria,
-            valor: lancamento.valor,
-            data: `${ano}-${mes}-${dia}`,
-            recorrencia: "gerado"
-        });
+    tipo: lancamento.tipo,
+    descricao: lancamento.descricao,
+    categoria: lancamento.categoria,
+    valor: lancamento.valor,
+    data: `${ano}-${mes}-${dia}`,
+    recorrencia: "gerado",
+    recorrenciaId: lancamento.recorrenciaId
+});
     }
 }
 
@@ -1603,27 +1611,67 @@ function salvarDados() {
 
 function excluir(index) {
 
-    if (
-        !confirm(
-            "Deseja excluir este lançamento?"
-        )
-    ) {
+    const item = lancamentos[index];
 
+    if (!item) {
         return;
-
     }
 
+    if (item.recorrenciaId) {
 
-    lancamentos.splice(
-        index,
-        1
-    );
+        const excluirTodos =
+            confirm(
+                "Este lançamento faz parte de uma recorrência.\n\n" +
+                "Clique em OK para excluir TODOS os lançamentos dessa recorrência.\n\n" +
+                "Clique em Cancelar para excluir SOMENTE este lançamento."
+            );
 
+        if (excluirTodos) {
+
+            lancamentos =
+                lancamentos.filter(
+                    lancamento =>
+                        lancamento.recorrenciaId !==
+                        item.recorrenciaId
+                );
+
+        } else {
+
+            const excluirSomenteEste =
+                confirm(
+                    "Deseja excluir somente este lançamento?"
+                );
+
+            if (!excluirSomenteEste) {
+                return;
+            }
+
+            lancamentos.splice(
+                index,
+                1
+            );
+        }
+
+    } else {
+
+        const confirmar =
+            confirm(
+                "Deseja excluir este lançamento?"
+            );
+
+        if (!confirmar) {
+            return;
+        }
+
+        lancamentos.splice(
+            index,
+            1
+        );
+    }
 
     salvarDados();
 
     renderizar();
-
 }
 
 
